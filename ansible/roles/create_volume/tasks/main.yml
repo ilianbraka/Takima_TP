@@ -1,0 +1,4 @@
+- name: Create Docker volume
+  community.docker.docker_volume:
+    name: db-volume
+    state: present---
