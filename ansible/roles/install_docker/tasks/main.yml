@@ -1,4 +1,3 @@
-# Install prerequisites for Docker
 - name: Install required packages
   apt:
     name:
@@ -7,50 +6,33 @@
       - curl
       - gnupg
       - lsb-release
-      - python3-venv
     state: latest
-    update_cache: yes
+    update_cache: yes  # Assure que le cache est mis à jour avant d'installer les paquets
 
-# Add Docker’s official GPG key
 - name: Add Docker GPG key
   apt_key:
     url: https://download.docker.com/linux/debian/gpg
     state: present
 
-# Set up the Docker stable repository
 - name: Add Docker APT repository
   apt_repository:
     repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
     state: present
-    update_cache: yes
+    update_cache: yes  # Met à jour le cache des paquets après l'ajout du dépôt Docker
 
-# Install Docker
 - name: Install Docker
   apt:
     name: docker-ce
-    state: present
+    state: present  # Installe Docker Community Edition
 
-# Install Python3 and pip3
-- name: Install Python3 and pip3
-  apt:
-    name:
-      - python3
-      - python3-pip
-    state: present
-
-# Create a virtual environment for Python packages
-- name: Create a virtual environment for Docker SDK
-  command: python3 -m venv /opt/docker_venv
-  args:
-    creates: /opt/docker_venv  # Only runs if this directory doesn’t exist
-
-# Install Docker SDK for Python in the virtual environment
-- name: Install Docker SDK for Python in virtual environment
-  command: /opt/docker_venv/bin/pip install docker
-
-# Ensure Docker is running
 - name: Ensure Docker is running
   service:
     name: docker
-    state: started
-  tags: docker
+    state: started  # Démarre le service Docker
+
+- name: Run HTTPD container
+  docker_container:
+    name: httpd
+    image: httpd:latest  # Utilise l'image officielle HTTPD de Docker
+    state: started  # Assure que le conteneur est en cours d'exécution
+    restart_policy: always  # Assure que le conteneur redémarre automatiquement en cas de panne

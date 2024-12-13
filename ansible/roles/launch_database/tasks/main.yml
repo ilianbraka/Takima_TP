@@ -1,14 +1,14 @@
-- name: Launch the database container
+- name: Run Database
   community.docker.docker_container:
-    name: my_database
-    image: mysql:latest
-    state: started
-    restart_policy: always
+    name: my-db
+    image: ilianbraka/tp-devops-database:latest
+    pull: always
     env:
-      MYSQL_ROOT_PASSWORD: "root_password"
-      MYSQL_DATABASE: "mydb"
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
     networks:
       - name: my-network
-    published_ports:
-      - "3306:3306"
-
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    state: started

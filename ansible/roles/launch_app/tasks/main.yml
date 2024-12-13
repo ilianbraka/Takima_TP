@@ -1,12 +1,13 @@
-- name: Launch the application container
+- name: Run Backend Application
   community.docker.docker_container:
-    name: my_app
-    image: nginx:latest
-    state: started
-    restart_policy: always
+    name: my-api
+    image: ilianbraka/tp-devops-simple-api:latest
+    pull: always
+    ports:
+      - "8080:8080"
     env:
-      APP_ENV: "production"
-      DATABASE_URL: "mysql://root:root_password@my_database/mydb"
+      DATABASE_HOST: my-db
+      DATABASE_PORT: "5432"
     networks:
       - name: my-network
-
+    state: started
