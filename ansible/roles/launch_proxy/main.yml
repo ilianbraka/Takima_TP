@@ -1,0 +1,10 @@
+- name: Launch the proxy container (nginx)
+  docker_container:
+    name: my_proxy
+    image: nginx:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "80:80"
+    networks:
+      - my_network

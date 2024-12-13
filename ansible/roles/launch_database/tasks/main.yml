@@ -1,0 +1,14 @@
+- name: Launch the database container
+  community.docker.docker_container:
+    name: my_database
+    image: mysql:latest
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: "root_password"
+      MYSQL_DATABASE: "mydb"
+    networks:
+      - name: my-network
+    published_ports:
+      - "3306:3306"
+
