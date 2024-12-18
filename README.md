@@ -349,6 +349,7 @@ Explanation:
 - Exposes port 80 on the host system to make the application publicly accessible.
 - Connects the container to the my-network Docker network, enabling it to forward requests to the backend application.
 
+*It was the only thing i can't make at time because I had a problem with the port*
 ---
 
 ## 4. Quality Gate with SonarCloud
