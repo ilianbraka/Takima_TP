@@ -123,7 +123,7 @@ ansible/
     └── launch_proxy/
 ```
 
-setup.yml File
+## **Setup.yml File**
 
 The setup.yml file is an inventory file for Ansible. It defines the hosts, groups, and global variables required for executing playbooks.
 Structure and Explanation:
@@ -152,7 +152,7 @@ Usage:
   - The specified private SSH key enables Ansible to securely connect to the hosts, ensuring authentication without requiring a password.
 
 
-playbook.yml File
+## **Setup.yml File**
 
 The playbook.yml is the master file that orchestrates the execution of roles. Each role corresponds to a specific task, such as installing Docker or starting a container.
 Structure and Explanation:
@@ -181,7 +181,7 @@ Explanation of Directives:
   roles:
   - Defines a sequence of roles to structure and modularize tasks. Each role encapsulates related tasks, promoting reusability and clarity in automation workflows.
 
-Purpose of setup.yml and playbook.yml:
+## **Purpose of setup.yml and playbook.yml :**
 
 These files enable Ansible to:
 
@@ -193,9 +193,9 @@ These files enable Ansible to:
 
 ---
 
-### **Roles Details**
+## **Roles Details**
 
-1. Role install_docker
+### *1. Role install_docker*
 
 Purpose:
 
@@ -224,7 +224,7 @@ Explanation:
 - Installs the Docker SDK, enabling Ansible to interact with Docker using its modules.
 
 
-2. Role create_network
+### *2. Role create_network*
 
 Purpose:
 
@@ -245,7 +245,7 @@ Explanation:
 
 This network, named my-network, allows containers (database, backend application, proxy) to communicate with each other without exposing their ports directly to the host system.
 
-3. Role create_volume
+### *3. Role create_volume*
 
 Purpose:
 
@@ -263,7 +263,7 @@ Explanation:
 
 This volume (db-volume) stores the database data, allowing it to persist across container restarts or redeployments.
 
-4. Role launch_database
+### *4. Role Launch_database*
 
 Purpose:
 
@@ -293,7 +293,7 @@ Explanation:
 - Connects the container to the my-network Docker network.
 - Ensures the container is started and operational.
 
-5. Role launch_app
+### *5. Role Launch_app*
 
 Purpose:
 
@@ -321,7 +321,7 @@ Explanation:
 - Configures database access using the DATABASE_URL environment variable.
 - Connects the container to the my-network Docker network.
 
-6. Role launch_proxy
+### *6. Role Launch_proxy*
 
 Purpose:
 
