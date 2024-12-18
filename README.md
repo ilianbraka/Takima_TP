@@ -121,14 +121,12 @@ ansible/
     ├── launch_database/
     ├── launch_app/
     └── launch_proxy/
-
+```
 
 setup.yml File
 
 The setup.yml file is an inventory file for Ansible. It defines the hosts, groups, and global variables required for executing playbooks.
 Structure and Explanation:
-
-```
 
 ### **Inventory File: `inventories/setup.yml`**
 ```yaml
@@ -144,14 +142,14 @@ all:
 
 Usage:
 
-    Global Group (all):
-    The all group applies global variables to all hosts defined in the inventory. This ensures consistent settings across the environment.
+  Global Group (all):
+  - The all group applies global variables to all hosts defined in the inventory. This ensures consistent settings across the environment.
 
-    Sub-group (prod):
-    The prod sub-group is used to organize and target production servers. Tasks can be applied specifically to this group without affecting other groups or environments.
+  Sub-group (prod):
+  - The prod sub-group is used to organize and target production servers. Tasks can be applied specifically to this group without affecting other groups or environments.
 
-    SSH Private Key:
-    The specified private SSH key enables Ansible to securely connect to the hosts, ensuring authentication without requiring a password.
+  SSH Private Key:
+  - The specified private SSH key enables Ansible to securely connect to the hosts, ensuring authentication without requiring a password.
 
 
 playbook.yml File
@@ -174,39 +172,39 @@ Structure and Explanation:
 
 Explanation of Directives:
 
-    hosts: all:
-    Applies the tasks to all the hosts specified in the setup.yml inventory file. This can be replaced with a specific group (e.g., prod) to target a subset of hosts.
+  hosts: all:
+  - Applies the tasks to all the hosts specified in the setup.yml inventory file. This can be replaced with a specific group (e.g., prod) to target a subset of hosts.
 
-    become: true:
-    Grants administrative privileges (e.g., via sudo) to execute tasks that require elevated permissions, such as installing packages or managing services.
+  become: true:
+  - Grants administrative privileges (e.g., via sudo) to execute tasks that require elevated permissions, such as installing packages or managing services.
 
-    roles:
-    Defines a sequence of roles to structure and modularize tasks. Each role encapsulates related tasks, promoting reusability and clarity in automation workflows.
+  roles:
+  - Defines a sequence of roles to structure and modularize tasks. Each role encapsulates related tasks, promoting reusability and clarity in automation workflows.
 
 Purpose of setup.yml and playbook.yml:
 
 These files enable Ansible to:
 
-    Organize Hosts and Environments:
-    The setup.yml inventory groups hosts into environments (e.g., production) and defines global variables, simplifying environment management.
+  Organize Hosts and Environments:
+  - The setup.yml inventory groups hosts into environments (e.g., production) and defines global variables, simplifying environment management.
 
-    Deploy Applications Step-by-Step:
-    The playbook.yml orchestrates the deployment process in a structured way, utilizing reusable roles to perform tasks in logical steps, ensuring maintainability and scalability.
+  Deploy Applications Step-by-Step:
+  - The playbook.yml orchestrates the deployment process in a structured way, utilizing reusable roles to perform tasks in logical steps, ensuring maintainability and scalability.
 
 ---
 
 ### **Roles Details**
 
 1. Role install_docker
+
 Purpose:
 
 This role installs Docker and its dependencies on the target server, serving as the foundation for deploying containers.
-Key Tasks:
 
-    Install Docker and Python3-Pip:
+Key Tasks:
+- Install Docker and Python3-Pip:
 
 #### 1. `install_docker`
-Installs Docker and its dependencies.
 ```yaml
 - name: Install Docker and dependencies
   apt:
@@ -221,20 +219,21 @@ Installs Docker and its dependencies.
     name: docker
 ```
 
-Explanation: - This task uses the apt package manager to install Docker and Pip on a Debian-based system.
-             - Installs the Docker SDK, enabling Ansible to interact with Docker using its modules.
+Explanation: 
+- This task uses the apt package manager to install Docker and Pip on a Debian-based system.
+- Installs the Docker SDK, enabling Ansible to interact with Docker using its modules.
 
 
 2. Role create_network
+
 Purpose:
 
 This role creates a Docker network to facilitate communication between containers.
-Key Tasks:
 
-    Create a Docker network:
+Key Tasks:
+- Create a Docker network:
 
 #### 2. `create_network`
-Creates a Docker network to connect containers.
 ```yaml
 - name: Create Docker network
   community.docker.docker_network:
@@ -242,15 +241,17 @@ Creates a Docker network to connect containers.
     state: present
 ```
 
-Explanation: This network, named my-network, allows containers (database, backend application, proxy) to communicate with each other without exposing their ports directly to the host system.
+Explanation: 
+
+This network, named my-network, allows containers (database, backend application, proxy) to communicate with each other without exposing their ports directly to the host system.
 
 3. Role create_volume
+
 Purpose:
 
 This role creates Docker volumes for persistent storage, ensuring data is preserved even if containers are stopped or removed.
 
 #### 3. `create_volume`
-Create a volume for the database:
 ```yaml
 - name: Create Docker volume for database
   community.docker.docker_volume:
@@ -258,18 +259,20 @@ Create a volume for the database:
     state: present
 ```
 
-Explanation: This volume (db-volume) stores the database data, allowing it to persist across container restarts or redeployments.
+Explanation: 
+
+This volume (db-volume) stores the database data, allowing it to persist across container restarts or redeployments.
 
 4. Role launch_database
+
 Purpose:
 
 This role deploys a PostgreSQL container for the application’s database.
-Key Tasks:
 
-    Launch the PostgreSQL container:
+Key Tasks:
+- Launch the PostgreSQL container:
 
 #### 4. `launch_database`
-Runs the PostgreSQL database container.
 ```yaml
 - name: Run PostgreSQL container
   community.docker.docker_container:
@@ -286,20 +289,20 @@ Runs the PostgreSQL database container.
 
 Explanation:
 
-    Defines environment variables required by PostgreSQL (username, password, and default database).
-    Connects the container to the my-network Docker network.
-    Ensures the container is started and operational.
+- Defines environment variables required by PostgreSQL (username, password, and default database).
+- Connects the container to the my-network Docker network.
+- Ensures the container is started and operational.
 
 5. Role launch_app
+
 Purpose:
 
 This role deploys the backend application in a Docker container.
-Key Tasks:
 
-    Launch the backend application:
+Key Tasks:
+- Launch the backend application:
 
 #### 5. `launch_app`
-Deploys the backend application container.
 ```yaml
 - name: Run backend application
   community.docker.docker_container:
@@ -314,20 +317,20 @@ Deploys the backend application container.
 
 Explanation:
 
-    Deploys a Docker image named simple-api:latest (the backend application).
-    Configures database access using the DATABASE_URL environment variable.
-    Connects the container to the my-network Docker network.
+- Deploys a Docker image named simple-api:latest (the backend application).
+- Configures database access using the DATABASE_URL environment variable.
+- Connects the container to the my-network Docker network.
 
 6. Role launch_proxy
+
 Purpose:
 
 This role deploys an HTTP proxy (Apache or HTTPD) to publicly expose the backend application.
-Key Tasks:
 
-    Launch the HTTPD container:
+Key Tasks:
+- Launch the HTTPD container:
 
 #### 6. `launch_proxy`
-Runs an HTTP server to expose the application.
 ```yaml
 - name: Run HTTP server
   community.docker.docker_container:
@@ -342,9 +345,9 @@ Runs an HTTP server to expose the application.
 
 Explanation:
 
-    Deploys a container using the httpd:latest image (HTTP server).
-    Exposes port 80 on the host system to make the application publicly accessible.
-    Connects the container to the my-network Docker network, enabling it to forward requests to the backend application.
+- Deploys a container using the httpd:latest image (HTTP server).
+- Exposes port 80 on the host system to make the application publicly accessible.
+- Connects the container to the my-network Docker network, enabling it to forward requests to the backend application.
 
 ---
 
