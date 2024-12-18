@@ -123,7 +123,7 @@ ansible/
     └── launch_proxy/
 ```
 
-## **Setup.yml File**
+### **Setup.yml File**
 
 The setup.yml file is an inventory file for Ansible. It defines the hosts, groups, and global variables required for executing playbooks.
 Structure and Explanation:
@@ -152,7 +152,7 @@ Usage:
   - The specified private SSH key enables Ansible to securely connect to the hosts, ensuring authentication without requiring a password.
 
 
-## **Setup.yml File**
+### **Playbook.yml File**
 
 The playbook.yml is the master file that orchestrates the execution of roles. Each role corresponds to a specific task, such as installing Docker or starting a container.
 Structure and Explanation:
@@ -181,7 +181,7 @@ Explanation of Directives:
   roles:
   - Defines a sequence of roles to structure and modularize tasks. Each role encapsulates related tasks, promoting reusability and clarity in automation workflows.
 
-## **Purpose of setup.yml and playbook.yml :**
+### **Purpose of setup.yml and playbook.yml :**
 
 These files enable Ansible to:
 
@@ -195,7 +195,7 @@ These files enable Ansible to:
 
 ## **Roles Details**
 
-### *1. Role install_docker*
+### *A. Role install_docker*
 
 Purpose:
 
@@ -204,7 +204,7 @@ This role installs Docker and its dependencies on the target server, serving as 
 Key Tasks:
 - Install Docker and Python3-Pip:
 
-#### 1. `install_docker`
+#### A. `install_docker`
 ```yaml
 - name: Install Docker and dependencies
   apt:
@@ -224,7 +224,7 @@ Explanation:
 - Installs the Docker SDK, enabling Ansible to interact with Docker using its modules.
 
 
-### *2. Role create_network*
+### *B. Role create_network*
 
 Purpose:
 
@@ -233,7 +233,7 @@ This role creates a Docker network to facilitate communication between container
 Key Tasks:
 - Create a Docker network:
 
-#### 2. `create_network`
+#### B. `create_network`
 ```yaml
 - name: Create Docker network
   community.docker.docker_network:
@@ -245,13 +245,13 @@ Explanation:
 
 This network, named my-network, allows containers (database, backend application, proxy) to communicate with each other without exposing their ports directly to the host system.
 
-### *3. Role create_volume*
+### *C. Role create_volume*
 
 Purpose:
 
 This role creates Docker volumes for persistent storage, ensuring data is preserved even if containers are stopped or removed.
 
-#### 3. `create_volume`
+#### C. `create_volume`
 ```yaml
 - name: Create Docker volume for database
   community.docker.docker_volume:
@@ -263,7 +263,7 @@ Explanation:
 
 This volume (db-volume) stores the database data, allowing it to persist across container restarts or redeployments.
 
-### *4. Role Launch_database*
+### *D. Role Launch_database*
 
 Purpose:
 
@@ -272,7 +272,7 @@ This role deploys a PostgreSQL container for the application’s database.
 Key Tasks:
 - Launch the PostgreSQL container:
 
-#### 4. `launch_database`
+#### D. `launch_database`
 ```yaml
 - name: Run PostgreSQL container
   community.docker.docker_container:
@@ -293,7 +293,7 @@ Explanation:
 - Connects the container to the my-network Docker network.
 - Ensures the container is started and operational.
 
-### *5. Role Launch_app*
+### *E. Role Launch_app*
 
 Purpose:
 
@@ -302,7 +302,7 @@ This role deploys the backend application in a Docker container.
 Key Tasks:
 - Launch the backend application:
 
-#### 5. `launch_app`
+#### E. `launch_app`
 ```yaml
 - name: Run backend application
   community.docker.docker_container:
@@ -321,7 +321,7 @@ Explanation:
 - Configures database access using the DATABASE_URL environment variable.
 - Connects the container to the my-network Docker network.
 
-### *6. Role Launch_proxy*
+### *F. Role Launch_proxy*
 
 Purpose:
 
@@ -330,7 +330,7 @@ This role deploys an HTTP proxy (Apache or HTTPD) to publicly expose the backend
 Key Tasks:
 - Launch the HTTPD container:
 
-#### 6. `launch_proxy`
+#### F. `launch_proxy`
 ```yaml
 - name: Run HTTP server
   community.docker.docker_container:
