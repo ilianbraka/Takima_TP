@@ -102,6 +102,29 @@ The following command compiles the application and runs integration tests:
 ```bash
 mvn clean verify
 ```
+
+*For what purpose do we need to push docker images?*
+
+We need to push Docker images to make them accessible for deployment across different environments and systems. Here are the main purposes:
+
+- Centralized Storage:
+  Pushing Docker images to a registry like DockerHub provides a centralized location to store and manage container images.
+
+- Ease of Deployment:
+  By publishing images, you can pull them from the registry to deploy on any server or cloud platform, ensuring consistent application behavior.
+
+- Collaboration:
+  It allows team members or collaborators to access and use the same image versions for testing, development, or production.
+
+- Versioning and Rollbacks:
+  Registries support versioning, making it easier to track changes and roll back to a previous version if needed.
+
+- CI/CD Pipelines:
+  Automated CI/CD pipelines rely on Docker images to deploy updates seamlessly. Pushing images ensures the latest changes are available for deployment.
+
+- Scalability:
+  Deploying pre-built images from a registry reduces the time needed to build containers on every server, enabling faster scaling of applications.
+
 ---
 
 ## 3. Infrastructure Configuration with Ansible
